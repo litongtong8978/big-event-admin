@@ -7,3 +7,6 @@ export const userLoginService = ({ username, password }) => {
   return request.post('/api/login', { username, password })
 
 }
+export const userGetInfoService = () => {
+  return request.get('/my/userinfo')
+}

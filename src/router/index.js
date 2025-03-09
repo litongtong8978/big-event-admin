@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from "@/stores"
 
 
 const router = createRouter({
@@ -32,6 +33,14 @@ const router = createRouter({
       ]
     }
   ],
+})
+//现在直接默认放行，旧的要调用next()
+router.beforeEach((to) => {
+  const userStore = useUserStore()
+  if (!userStore.token && to.path !== '/login')
+    return "/login"
+  return true
+
 })
 
 export default router

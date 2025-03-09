@@ -45,6 +45,7 @@ const rules = {
     },
   ],
 }
+
 const register = async () => {
   await form.value.validate() //预检验，按钮时检查，没成功不会发请求··········
   const res = await userRegisterService(formModel.value)
@@ -74,6 +75,7 @@ const login = async () => {
   })
   router.push('/')
 }
+
 watch(isRegister, () => {
   formModel.value = {
     username: '',

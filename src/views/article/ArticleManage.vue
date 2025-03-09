@@ -1,9 +1,11 @@
+<script></script>
+
 <template>
-  <div>wenzhangguanli</div>
+  <page-container title="文章管理">
+    <template #extra>
+      <el-button> 添加文章 </el-button>
+    </template>
+    主体
+  </page-container>
 </template>
-
-<script>
-export default {}
-</script>
-
 <style></style>
