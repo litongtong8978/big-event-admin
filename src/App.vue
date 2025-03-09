@@ -1,9 +1,9 @@
 <script setup></script>
 
 <template>
-  <div>我是Appp</div>
+  <div></div>
 
-  <RouterView />
+  <router-view></router-view>
 </template>
 
 <style scoped></style>
