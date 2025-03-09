@@ -25,5 +25,8 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
+    // alias: {
+    //   '@': path.resolve(__dirname, './src') // 确保路径正确
+    // }
   },
 })
