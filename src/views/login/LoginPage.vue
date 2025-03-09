@@ -1,6 +1,7 @@
 <script setup>
 import { User, Lock } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+const form = ref()
 const isRegister = ref(false)
 const formModel = ref({
   username: '',
@@ -40,6 +41,16 @@ const rules = {
     },
   ],
 }
+const register = async () => {
+  await form.value.Validate()
+}
+watch(isRegister, () => {
+  formModel.value = {
+    username: '',
+    password: '',
+    repassword: '',
+  }
+})
 </script>
 
 <template>
@@ -88,7 +99,7 @@ const rules = {
         </el-form-item>
       </el-form>
       <el-form :model="formModel" :rules="rules" ref="form" size="large" autocomplete="off" v-else>
-        <el-form-item>
+        <el-form-item @click="register">
           <h1>登录</h1>
         </el-form-item>
         <el-form-item prop="username">
