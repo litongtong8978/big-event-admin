@@ -2,24 +2,21 @@
 <script setup>
 import { Edit, Delete } from '@element-plus/icons-vue'
 import ChannelSelect from './components/ChannelSelect.vue'
+import ArticleEdit from './components/ArticleEdit.vue'
 import { ref } from 'vue'
 import { artGetListService } from '@/api/article.js'
 import { formatTime } from '@/utils/format.js'
+
 const articleList = ref([])
 const total = ref(0)
 const loading = ref(false)
+const articleEditRef = ref()
 const params = ref({
   pagenum: 1, // 当前页
   pagesize: 5, // 当前生效的每页条数
   cate_id: '',
   state: '',
 })
-const onEditArticle = (row) => {
-  console.log(row)
-}
-const onDeleteArticle = (row) => {
-  console.log(row)
-}
 
 const getArticleList = async () => {
   loading.value = true
@@ -48,13 +45,29 @@ const onReset = () => {
   params.value.state = ''
   getArticleList()
 }
+const onAddArticle = () => {
+  articleEditRef.value.open({})
+}
+const onEditArticle = (row) => {
+  articleEditRef.value.open(row)
+}
+const onDeleteArticle = (row) => {
+  console.log(row)
+}
+const onSucesss = (type) => {
+  if (type === 'add') {
+    const lastPage = Math.ceil((total.value + 1) / params.value.pagesize)
+    params.value.pagenum = lastPage
+  }
+  getArticleList()
+}
 getArticleList()
 </script>
 
 <template>
   <page-container title="文章管理">
     <template #extra>
-      <el-button> 添加文章 </el-button>
+      <el-button type="primary" @click="onAddArticle"> 添加文章 </el-button>
     </template>
     <el-form inline>
       <el-form-item label="文章分类：">
@@ -118,6 +131,7 @@ getArticleList()
       @current-change="onCurrentChange"
       style="margin-top: 20px; justify-content: flex-end"
     />
+    <article-edit ref="articleEditRef" @success="onSucesss"></article-edit>
   </page-container>
 </template>
 <style>

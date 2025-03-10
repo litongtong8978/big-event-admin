@@ -33,7 +33,7 @@ const onDeleteChannel = async (row) => {
 const onAddChannel = () => {
   dialog.value.open({})
 }
-const onSucess = () => {
+const onSuccess = () => {
   getChannelList()
 }
 </script>
@@ -61,7 +61,7 @@ const onSucess = () => {
     </el-table>
 
     <!--  -->
-    <channel-edit ref="dialog" @success="onSucess"> </channel-edit>
+    <channel-edit ref="dialog" @success="onSuccess"> </channel-edit>
   </page-container>
 </template>
 <style></style>

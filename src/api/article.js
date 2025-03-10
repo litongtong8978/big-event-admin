@@ -22,5 +22,7 @@ export const artGetListService = (params) => {
   return request.get('/my/article/list', {
     params
   })
-
+}
+export const artPublishService = (data) => {
+  return request.post('/my/article/add', data)
 }
