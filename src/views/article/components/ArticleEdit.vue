@@ -4,8 +4,10 @@ import ChannelSelect from './ChannelSelect.vue'
 import { Plus } from '@element-plus/icons-vue'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { artPublishService } from '@/api/article.js'
+import { artPublishService, artGetDetailService, artEditService } from '@/api/article.js'
 import { ElMessage } from 'element-plus'
+import { baseURL } from '@/utils/request.js'
+import axios from 'axios'
 const visibleDraw = ref(false)
 const defaultForm = {
   title: '',
@@ -21,10 +23,17 @@ const imgUrl = ref('')
 const editorRef = ref()
 const emit = defineEmits(['success'])
 
-const open = (row) => {
+const open = async (row) => {
   visibleDraw.value = true
   if (row.id) {
-    console.log('bianjizhiqianshuju')
+    // console.log('bianjizhiqianshuju')
+    const res = await artGetDetailService(row.id)
+    console.log(res.data)
+    formModel.value = res.data.data
+    imgUrl.value = baseURL + formModel.value.cover_img
+    const file = imageUrlToFileObject(imgUrl.value, formModel.value.cover_img)
+
+    formModel.value.cover_img = file
   } else {
     formModel.value = { ...defaultForm }
     imgUrl.value = ''
@@ -47,10 +56,10 @@ const onPublish = async (state) => {
 
   if (formModel.value.id) {
     // 编辑操作
-    // await artEditService(fd)
+    await artEditService(fd)
     ElMessage.success('修改成功')
     visibleDraw.value = false
-    // emit('success', 'edit')
+    emit('success', 'edit')
   } else {
     // 添加操作
     await artPublishService(fd)
@@ -60,6 +69,30 @@ const onPublish = async (state) => {
     emit('success', 'add')
   }
 }
+
+//网络图片地址转换为 File 对象的函数
+async function imageUrlToFileObject(imageUrl, filename) {
+  try {
+    // 使用 Axios 下载图片数据
+    const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
+
+    // 将下载的数据转换成 Blob 对象
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'],
+    })
+
+    // 创建 File 对象
+    const file = new File([blob], filename, {
+      type: response.headers['content-type'],
+    })
+
+    return file
+  } catch (error) {
+    console.error('Error converting image URL to File object:', error)
+    return null
+  }
+}
+
 defineExpose({
   open,
 })
